@@ -1,0 +1,67 @@
+{
+    "Experiment": {
+        "version": 1.0,
+        "description": "GNN configuration.",
+        "path": "../results/full/gnn",
+        "seed": 12
+    },
+    "Data": {
+        "type": "gnn-pyg",
+        "args": {
+            "load_path": "../",
+            "reduced": false,
+            "product_links": "virtual",
+            "country_links": "virtual",
+            "brand_links": "virtual",
+            "type_links": "virtual",
+            "customer_transforms": {
+                "removeoutliers": true,
+                "dropyob": true,
+                "minMaxScaler": {
+                    "cols": ["yearOfBirth",
+                             "salesPerCustomer",
+                             "returnsPerCustomer"]
+                }
+            },
+            "product_transforms": {
+                "removeoutliers": true,
+                "minMaxScaler": {
+                    "cols": ["avgGbpPrice",
+                             "avgDiscountValue",
+                             "salesPerProduct",
+                             "returnsPerProduct"]
+                }
+            }
+        }
+    },
+    "Model": {
+        "type": "gnn",
+        "loss": "binary-cross-entropy",
+        "args": {
+            "encoder_name": "sage-conv",
+            "encoder_args": {
+                "hidden_channels": [128],
+                "out_channels": 128,
+                "dropout": 0.2,
+                "normalize": true
+            },
+            "decoder_name": "mlp",
+            "decoder_args": {
+                "hidden_channels": [64],
+                "dropout": 0.2
+            },
+            "optimizer": {
+                "name": "adam",
+                "args": {
+                    "lr": 0.001,
+                    "weight_decay": 0.0
+                }
+            },
+            "batch_size": 128,
+            "save_epochs": 10
+        }
+    },
+    "Training": {
+        "epochs": 50
+    }
+}

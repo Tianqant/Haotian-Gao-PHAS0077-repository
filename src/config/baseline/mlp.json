@@ -1,0 +1,50 @@
+{
+    "Experiment": {
+        "version": 0.0,
+        "description": "GNN configuration.",
+        "path": "../results/test",
+        "seed": 42
+    },
+    "Data": {
+        "type": "gnn-pyg",
+        "args": {
+            "load_path": "../",
+            "reduced": 10000,
+            "customer_transforms": {
+                "removeoutliers": true,
+                "dropyob": true,
+                "minMaxScaler": {
+                    "cols": ["yearOfBirth",
+                             "salesPerCustomer",
+                             "returnsPerCustomer"]
+                }
+            },
+            "product_transforms": {
+                "removeoutliers": true,
+                "minMaxScaler": {
+                    "cols": ["avgGbpPrice",
+                             "avgDiscountValue",
+                             "salesPerProduct",
+                             "returnsPerProduct"]
+                }
+            }
+        }
+    },
+    "Model": {
+        "type": "mlp",
+        "loss": "binary-cross-entropy",
+        "args": {
+            "input_channels": 68,
+            "hidden_channels": [64],
+            "optimizer": {
+                "name": "adam",
+                "args": {
+                    "lr": 0.05
+                }
+            }
+        }
+    },
+    "Training": {
+        "epochs": 50
+    }
+}
